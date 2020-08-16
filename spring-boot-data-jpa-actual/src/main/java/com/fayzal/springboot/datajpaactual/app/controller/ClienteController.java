@@ -36,6 +36,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 //import com.fayzal.springboot.datajpaactual.app.models.dao.IClienteDaoCrudRepo;
 import com.fayzal.springboot.datajpaactual.app.models.entity.Cliente;
 import com.fayzal.springboot.datajpaactual.app.service.IClienteService;
+import com.fayzal.springboot.datajpaactual.app.service.IUploadService;
 import com.fayzal.springboot.datajpaactual.app.util.paginator.PageRender;
 
 @Controller
@@ -47,6 +48,8 @@ public class ClienteController {
 	
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	
+	@Autowired
+	private IUploadService uploadService;
 	@GetMapping("/listar")
 	public String listar(@RequestParam(name = "page",defaultValue = "0") int page,Model model) {
 		
@@ -81,17 +84,23 @@ public class ClienteController {
 		log.info("Cliente: "+cliente.getFoto());
 		
 		if(cliente.getId()!=null && !cliente.getFoto().isEmpty()) {
-			Path nombreCliente = Paths.get("uploads").resolve(cliente.getFoto()).toAbsolutePath();
+			/* Upload service
+			 * Path nombreCliente = Paths.get("uploads").resolve(cliente.getFoto()).toAbsolutePath();
 			log.info("Ruta del path a editar: "+nombreCliente.toString());
 			File archivo = nombreCliente.toFile();
 			if(archivo.exists() && archivo.canRead()) {
 				if(!archivo.delete()) {
 					flash.addFlashAttribute("error", "El archivo no se pudo eliminar !");
 				}
+			}*/
+			
+			if(!uploadService.delete(cliente.getFoto())) {
+				flash.addFlashAttribute("error", "El archivo no se pudo eliminar !");
 			}
 		}
 		
 		if(!file.isEmpty()) {
+			//Se deja todo en el servicio de Upload service
 			/* Metodo 1: Agregar directorio estatico dentro del proyecto, si no se refresca el
 			deploy no se visualiza el contenido del directorio
 			Path directorioRecursos = Paths.get("src//main//resources//static//uploads");
@@ -104,10 +113,10 @@ public class ClienteController {
 			/* Metodo 3:Configuracion para carpeta externa del proyecto pero dentro de este directorio*/
 			//Se crea la ruta tomando la carpeta upload dentro del directorio del proyecto y 
 			//se concatena el nombre del archivo
-			String uuid = UUID.randomUUID().toString();
-			String nombreFoto = uuid+"_"+file.getOriginalFilename();
-			Path rootPath = Paths.get("uploads").resolve(nombreFoto);
-			Path rootAbsolutePath = rootPath.toAbsolutePath();
+			//String uuid = UUID.randomUUID().toString();
+			//String nombreFoto = uuid+"_"+file.getOriginalFilename();
+			//Path rootPath = Paths.get("uploads").resolve(nombreFoto);
+			//Path rootAbsolutePath = rootPath.toAbsolutePath();
 			
 			try {
 				/* Metodo 1 y 2: Copiado de los bytes del objeto
@@ -117,8 +126,8 @@ public class ClienteController {
 				Path rutaCompleta = Paths.get(rootPath + "//" + file.getOriginalFilename());
 				Files.write(rutaCompleta, bytes);*/
 				//Metodo abreviado 1 y 2 sirve para todos los metodos: Realiza la copia del archivo
-				Files.copy(file.getInputStream(), rootAbsolutePath);
-				
+				//Files.copy(file.getInputStream(), rootAbsolutePath);
+				String nombreFoto=uploadService.copy(file);
 				flash.addFlashAttribute("info","La foto: "+file.getOriginalFilename()+" se ha subido de forma exitosa");
 				
 				cliente.setFoto(nombreFoto);
@@ -142,17 +151,19 @@ public class ClienteController {
 	//se pone el :.+ para que la peticion no corte la extension del archivo
 	@GetMapping(value="/uploads/{filename:.+}")
 	public ResponseEntity<Resource> cargarFoto(@PathVariable String filename){
-		
-		Path rootPath = Paths.get("uploads").resolve(filename).toAbsolutePath();
-		log.info("La ruta es: "+ rootPath.toString());
+		//Se agrega en el upload Service
+		/*Path rootPath = Paths.get("uploads").resolve(filename).toAbsolutePath();
+		log.info("La ruta es: "+ rootPath.toString());*/
 		Resource recurso=null;
 		
 		try {
-			recurso = new UrlResource(rootPath.toUri());
+			recurso = uploadService.load(filename);
+			//Se agrega en el upload service
+			/*recurso = new UrlResource(rootPath.toUri());
 			if(!recurso.isReadable() || !recurso.exists()) {
 				throw new RuntimeException("Error no se puede cargar la imagen"+ rootPath.toString());
 			}
-			log.info("La ruta es: "+ rootPath.toString());
+			log.info("La ruta es: "+ rootPath.toString());*/
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -190,12 +201,16 @@ public class ClienteController {
 		Cliente cliente = clienteDao.findOne(id);
 		
 		if(cliente!= null && !cliente.getFoto().isEmpty()) {
-			Path nombreCliente = Paths.get("uploads").resolve(cliente.getFoto()).toAbsolutePath();
+			//Upload service esta
+			/*Path nombreCliente = Paths.get("uploads").resolve(cliente.getFoto()).toAbsolutePath();
 			File archivo = nombreCliente.toFile();
 			if(archivo.exists() && archivo.canRead()) {
 				if(!archivo.delete()) {
 					flash.addFlashAttribute("error", "El archivo no se pudo eliminar !");
 				}
+			}*/
+			if(!uploadService.delete(cliente.getFoto())) {
+				flash.addFlashAttribute("error", "El archivo no se pudo eliminar !");
 			}
 		}
 		
