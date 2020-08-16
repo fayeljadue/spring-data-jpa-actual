@@ -3,7 +3,8 @@
 <head th:fragment="head">
 <meta charset="UTF-8">
 <title th:text="${titulo}"></title>
-<link rel="stylesheet" th:href="@{/stylesheet/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/css/jquery-ui.min.css}">
 </head>
 <body>
 
@@ -40,9 +41,11 @@
 		<img alt="Imagen de Spring boot"
 			th:src="@{/images/Spring_Framework_Logo.png}" height="80px" width="220px">
 		<p>Proyecto desarrollado en spring boot por Fayzal Eljadue</p>
-		<script th:src="@{/stylesheet/jquery-3.5.1.slim.min.js}"></script>
-		<script th:src="@{/stylesheet/popper.min.js}"></script>
-		<script th:src="@{/stylesheet/bootstrap.min.js}"></script>
+		<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+		<script th:src="@{/js/popper.min.js}"></script>
+		<script th:src="@{/js/bootstrap.min.js}"></script>
+		<script th:src="@{/js/jquery-ui.min.js}"></script>
+		
 	</footer>
 </body>
 </html>

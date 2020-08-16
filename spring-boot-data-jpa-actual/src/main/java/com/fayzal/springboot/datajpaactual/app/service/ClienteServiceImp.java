@@ -9,13 +9,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fayzal.springboot.datajpaactual.app.models.dao.IClienteDao;
+import com.fayzal.springboot.datajpaactual.app.models.dao.IFacturaDao;
+import com.fayzal.springboot.datajpaactual.app.models.dao.IProductoDao;
 import com.fayzal.springboot.datajpaactual.app.models.entity.Cliente;
+import com.fayzal.springboot.datajpaactual.app.models.entity.Factura;
+import com.fayzal.springboot.datajpaactual.app.models.entity.Producto;
 
 @Service("ClienteServiceDaoNormal")
 public class ClienteServiceImp implements IClienteService {
 
 	@Autowired
 	private IClienteDao clienteDao;
+	
+	@Autowired 
+	private IFacturaDao facturaDao;
+	
+	@Autowired
+	private IProductoDao productoDao;
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -49,6 +59,38 @@ public class ClienteServiceImp implements IClienteService {
 	public Page<Cliente> findAll(Pageable page) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Producto> findByNombre(String term) {
+		return productoDao.findByNombreLikeIgnoreCase("%" + term + "%");
+	}
+
+	@Override
+	@Transactional
+	public void saveFactura(Factura factura) {
+		facturaDao.save(factura);
+	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public Producto findProductoById(Long id) {
+		// TODO Auto-generated method stub
+		return productoDao.findById(id).orElse(null);
+	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public Factura findFacturaById(Long id) {
+		// TODO Auto-generated method stub
+		return facturaDao.findById(id).orElse(null);
+	}
+
+	@Override
+	@Transactional
+	public void deleteFactura(Long id) {
+		facturaDao.deleteById(id);
 	}
 
 }
