@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="utilidades/layout :: head"></head>
+<body>
+
+	<header th:replace="utilidades/layout :: header"></header>
+	<div class="container py-4">
+		<div class="card bg-light">
+			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-body">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Nombre</th>
+							<th>Apellido</th>
+							<th>Email</th>
+							<th>fecha de creacion</th>
+							<th colspan="2"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:if="${!clientes.isEmpty()}" th:each="cliente:${clientes}">
+							<td><a th:href="@{'/ver/'+ ${cliente.id}}" class="btn btn-primary" th:text="${cliente.id}"></a></td>
+							<td th:text="${cliente.nombre}"></td>
+							<td th:text="${cliente.apellido}"></td>
+							<td th:text="${cliente.email}"></td>
+							<td th:text="${cliente.createAt}"></td>
+							<td><a th:href="@{/form/}+${cliente.id}"
+								class="btn btn-primary" th:text="'Editar'"></a></td>
+							<td><a th:href="@{/eliminar/}+${cliente.id}"
+								class="btn btn-danger" th:text="'Eliminar'"
+								onclick="return confirm('Seguro que desea eliminar');"></a></td>
+						</tr>
+					</tbody>
+				</table>
+				<nav th:replace="utilidades/paginator-nav :: paginator"></nav>
+			</div>
+		</div>
+	</div>
+	
+	<footer th:replace="utilidades/layout :: footer"></footer>
+</html>
+</body>
