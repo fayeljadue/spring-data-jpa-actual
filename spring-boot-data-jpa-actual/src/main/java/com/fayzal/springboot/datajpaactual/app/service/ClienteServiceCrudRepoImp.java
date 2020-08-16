@@ -33,14 +33,14 @@ public class ClienteServiceCrudRepoImp implements IClienteService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Cliente findOne(Integer id) {
+	public Cliente findOne(Long id) {
 		// TODO Auto-generated method stub
 		return clienteDao.findById(id).get();
 	}
 
 	@Override
 	@Transactional
-	public void delete(Integer id) {
+	public void delete(Long id) {
 		// TODO Auto-generated method stub
 		clienteDao.deleteById(id);
 	}

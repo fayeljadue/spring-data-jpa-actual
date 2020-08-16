@@ -36,12 +36,12 @@ public class ClienteDaoImpl implements IClienteDao {
 	}
 
 	@Override
-	public Cliente findOne(Integer id) {
+	public Cliente findOne(Long id) {
 		return em.find(Cliente.class, id);
 	}
 
 	@Override
-	public void delete(Integer id) {
+	public void delete(Long id) {
 		Cliente cliente = this.findOne(id);
 		em.remove(cliente);
 		return;

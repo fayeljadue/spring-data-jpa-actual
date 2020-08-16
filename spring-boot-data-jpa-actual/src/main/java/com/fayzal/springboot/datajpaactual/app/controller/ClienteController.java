@@ -175,7 +175,7 @@ public class ClienteController {
 	}
 	
 	@GetMapping("/form/{id}")
-	public String editar(@PathVariable(name = "id") Integer id,Model model, RedirectAttributes flash) {
+	public String editar(@PathVariable(name = "id") Long id,Model model, RedirectAttributes flash) {
 		
 		Cliente cliente = null;
 		
@@ -196,7 +196,7 @@ public class ClienteController {
 	}
 	
 	@GetMapping("/eliminar/{id}")
-	public String eliminar(@PathVariable("id") Integer id,RedirectAttributes flash){
+	public String eliminar(@PathVariable("id") Long id,RedirectAttributes flash){
 		
 		Cliente cliente = clienteDao.findOne(id);
 		
@@ -222,7 +222,7 @@ public class ClienteController {
 	}
 	
 	@GetMapping("/ver/{id}")
-	public String ver(@PathVariable(value="id") Integer id,Model model, RedirectAttributes flash) {
+	public String ver(@PathVariable(value="id") Long id,Model model, RedirectAttributes flash) {
 		
 		Cliente cliente = clienteDao.findOne(id);
 		

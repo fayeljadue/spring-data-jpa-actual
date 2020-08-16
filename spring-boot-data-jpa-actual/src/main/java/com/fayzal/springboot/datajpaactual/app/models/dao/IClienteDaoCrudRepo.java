@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.fayzal.springboot.datajpaactual.app.models.entity.Cliente;
 
-public interface IClienteDaoCrudRepo extends CrudRepository<Cliente, Integer> {
+public interface IClienteDaoCrudRepo extends CrudRepository<Cliente, Long> {
 
 }

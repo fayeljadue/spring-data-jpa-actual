@@ -33,14 +33,14 @@ public class ClienteServiceImp implements IClienteService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Cliente findOne(Integer id) {
+	public Cliente findOne(Long id) {
 		// TODO Auto-generated method stub
 		return clienteDao.findOne(id);
 	}
 
 	@Override
 	@Transactional
-	public void delete(Integer id) {
+	public void delete(Long id) {
 		// TODO Auto-generated method stub
 		clienteDao.delete(id);
 	}
