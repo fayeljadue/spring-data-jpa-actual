@@ -2,6 +2,8 @@ package com.fayzal.springboot.datajpaactual.app.models.dao;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
+
 import com.fayzal.springboot.datajpaactual.app.models.entity.Cliente;
 
 public interface IClienteDao {
@@ -13,4 +15,6 @@ public interface IClienteDao {
 	public Cliente findOne(Long id);
 	
 	public void delete(Long id);
+	
+	public Cliente findClienteByIdWithFacturas(Long id);
 }

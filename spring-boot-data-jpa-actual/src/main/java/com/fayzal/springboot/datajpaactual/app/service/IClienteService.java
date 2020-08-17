@@ -32,4 +32,7 @@ public interface IClienteService {
 	
 	public void deleteFactura(Long id);
 	
+	public Factura findByIdWithClienteWithItemFacturaWithProducto(Long id);
+	
+	public Cliente findClienteByIdWithFacturas(Long id);
 }

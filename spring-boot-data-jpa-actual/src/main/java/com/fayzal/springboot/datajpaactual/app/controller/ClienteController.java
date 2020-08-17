@@ -224,8 +224,8 @@ public class ClienteController {
 	@GetMapping("/ver/{id}")
 	public String ver(@PathVariable(value="id") Long id,Model model, RedirectAttributes flash) {
 		
-		Cliente cliente = clienteDao.findOne(id);
-		
+		//Cliente cliente = clienteDao.findOne(id);
+		Cliente cliente = clienteDao.findClienteByIdWithFacturas(id);
 		if(cliente ==null) {
 			flash.addFlashAttribute("error","El cliente no existe");
 			return "redirect:/listar";
