@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="utilidades/layout::head"></head>
+<body>
+
+	<header th:replace="utilidades/layout::header"></header>
+
+	<div class="container py-4">
+		<div class="card bg-danger text-white">
+			<div class="card-header">Acceso Denegado!</div>
+			<div class="card-body">
+				<h5 class="card-title">
+					Lo sentimos: <span th:text="${#authentication.name}"></span>,
+					no tienes permiso a esta url.
+				</h5>
+				
+				<a th:href="@{/listar}" class="btn btn-outline-light" role="button" th:text="'<< Regresar'"></a>
+
+			</div>
+		</div>
+	</div>
+
+	<footer th:replace="utilidades/layout::footer"></footer>
+</body>
+</html>
