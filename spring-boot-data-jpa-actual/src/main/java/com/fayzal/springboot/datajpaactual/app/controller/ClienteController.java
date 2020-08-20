@@ -215,7 +215,7 @@ public class ClienteController {
 	//Anotacion si se usa el prePostAuthorize en la clase de config de seguridad
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	/*Anotacion @Secured(value = "ROLE_ADMIN") cuando se usa securedEnabled = true para proteger URL en la clase
-	de config de seguridad
+	de config de seguridad primera opcion
 	@Secured(value = "ROLE_ADMIN")*/
 	@GetMapping("/form/{id}")
 	public String editar(@PathVariable(name = "id") Long id,Model model, RedirectAttributes flash) {
