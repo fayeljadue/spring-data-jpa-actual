@@ -1,5 +1,7 @@
 package com.fayzal.springboot.datajpaactual.app;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,10 +25,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter  {
 	private LoginSuccessHandler successHandler;
 	
 	//Bean para la configuracion del encrypt del password
-	@Bean
+	/*Se pasa a la clase de configuracion principal y se inyectara aca
+	 * @Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
-	}
+	}*/
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
+	//Se inyecta el datasource para realizar la conexion a la base de datos
+	@Autowired
+	private DataSource dataSource;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -60,20 +69,30 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter  {
 	@Autowired
 	public void configurerGlobal(AuthenticationManagerBuilder builder) throws Exception{
 		
-		//codificador de la contraseña del usuario 
-		PasswordEncoder encoder = this.passwordEncoder();
+		//codificador de la contraseña del usuario se mueve a la clase principal
+		//PasswordEncoder encoder = this.passwordEncoder();
+		PasswordEncoder encoder = passwordEncoder;
 		
 		//metodo de codificacion de la contraseña del usuario, se usa expresion lambda con los metodos ecoder::encode
 		/*Este seria el metodo completo
 		 * UserBuilder userL = User.builder().passwordEncoder(password ->{
 		return encoder.encode(password);
 		});*/
-		UserBuilder user = User.builder().passwordEncoder(encoder::encode);
+		/*Esto se remplaza para realizar la conexion por medio de la base de datos
+		 * UserBuilder user = User.builder().passwordEncoder(encoder::encode);
 		
 		builder.inMemoryAuthentication()
 		.withUser(user.username("admin").password("1234").roles("ADMIN","USER"))
 		.withUser(user.username("fayzal").password("1234").roles("USER"));
+		*/
 		
+		//Con esto se hace la conexion a la base de datos y se obtienen los usuarios y los roles
+		builder
+		.jdbcAuthentication()
+		.dataSource(dataSource)
+		.passwordEncoder(encoder)
+		.usersByUsernameQuery("select username,password, enable from users where username=?")
+		.authoritiesByUsernameQuery("select u.username, a.authority from authorities a inner join users u on (u.id=a.user_id) where u.username=?");
 	}
 	
 }
