@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.fayzal.springboot.datajpaactual.app.auth.handler.LoginSuccessHandler;
+import com.fayzal.springboot.datajpaactual.app.service.JpaUserDatailsService;
 //Anotacion para habilitar anotaciones de seguridad a los metodos en vez de hacerlo en esta clase @Secured(value ={"ROLE_XX,ROLE_XX1"})
 //Con el atributo prePostEnable, tambien se puede hacer autenticacion de roles, pero usan la anotacion @PreAuthorize(hasRole('ROLE_XXX'))
 @EnableGlobalMethodSecurity(securedEnabled = true,prePostEnabled = true)
@@ -33,9 +34,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter  {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
-	//Se inyecta el datasource para realizar la conexion a la base de datos
+	//Se inyecta el datasource para realizar la conexion a la base de datos conb jdbc
+	/*@Autowired
+	private DataSource dataSource;*/
+	
 	@Autowired
-	private DataSource dataSource;
+	private JpaUserDatailsService UserDetailsService;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -87,12 +91,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter  {
 		*/
 		
 		//Con esto se hace la conexion a la base de datos y se obtienen los usuarios y los roles
-		builder
+		//Con JDBC
+		/*builder
 		.jdbcAuthentication()
 		.dataSource(dataSource)
 		.passwordEncoder(encoder)
 		.usersByUsernameQuery("select username,password, enable from users where username=?")
 		.authoritiesByUsernameQuery("select u.username, a.authority from authorities a inner join users u on (u.id=a.user_id) where u.username=?");
+		*/
+		
+		builder.userDetailsService(UserDetailsService)
+		.passwordEncoder(encoder);
+		
 	}
 	
 }
