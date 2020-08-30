@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.UUID;
 
 import javax.management.RuntimeErrorException;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
@@ -61,10 +63,14 @@ public class ClienteController {
 	@Autowired
 	private IUploadService uploadService;
 	
+	@Autowired
+	private MessageSource messageSource;
+	
 	@GetMapping({"/listar","/"})
 	public String listar(@RequestParam(name = "page",defaultValue = "0") int page,Model model,
 			Authentication authentication, /* (Authentication authentication) forma de obtener la autenticacion por metodo*/
-			HttpServletRequest request) { //Obtencion del Request para emplear la clase (SecurityContextHolderAwareRequestWrapper) 
+			HttpServletRequest request, //Obtencion del Request para emplear la clase (SecurityContextHolderAwareRequestWrapper)
+			Locale locale) {  
 		
 		//Autenticacion de forma estatica
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -94,8 +100,8 @@ public class ClienteController {
 		Page<Cliente> clientes = clienteDao.findAll(pageRequest);
 		
 		PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
-		
-		model.addAttribute("titulo", "Listar Clientes");
+		//Con esto se puede traer los mensajes de los properties.
+		model.addAttribute("titulo", messageSource.getMessage("text.cliente.listar.titulo", null, locale));
 		model.addAttribute("clientes", clientes);
 		model.addAttribute("page", pageRender);
 		return "listar";
