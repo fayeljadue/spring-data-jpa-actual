@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -64,6 +65,17 @@ public class MvcConfig implements WebMvcConfigurer{
 	public void addInterceptors(InterceptorRegistry registry) {
 		// TODO Auto-generated method stub
 		registry.addInterceptor(localeChangeInterceptor());
+	}
+	
+	//Bean para la configuracion de realizar el proceso de marshall a las clases que se necesiten,
+	//los serializa a xml, necesita de esto para poder realizar la conversion, se debe configurar Wrapper ClienteList
+	@Bean
+	public Jaxb2Marshaller jaxb2Marshaller() {
+		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+		//En marca la clase wrapper de conversion
+		marshaller.setClassesToBeBound(new Class[] {com.fayzal.springboot.datajpaactual.app.view.xml.ClienteList.class});
+		return marshaller;
+		
 	}
 	
 }

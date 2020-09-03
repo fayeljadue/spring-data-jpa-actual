@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "facturas")
@@ -86,6 +87,11 @@ public class Factura implements Serializable {
 		this.createAt = createAt;
 	}
 
+	//Se implementa esta anotacion debido a que al realizar la serializacion para convertir a XML,
+	//esta entra en un loop infinito debido aque se llama el cliente, este trae las facturas, pero a su
+	// vez como es serializacion este nuevamente trae al cliente por el atributo de esta clase para 
+	//generar el documento, esto permite que omita el atributo en el sentido factura->cliente
+	@XmlTransient
 	public Cliente getCliente() {
 		return cliente;
 	}

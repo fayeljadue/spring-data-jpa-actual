@@ -10,8 +10,10 @@
 			<div class="card-header" th:text="${titulo}"></div>
 			<div class="card-body">
 				<h4 class="card-title">
-					<a class="btn btn-success btn-xs float-right"
+					<a class="btn btn-outline-success btn-xs float-right"
 						th:href="@{'/listar'(format=csv)}">CSV</a>
+						<a class="btn btn-success btn-xs float-right"
+						th:href="@{'/listar'(format=xml)}">XML</a>
 				</h4>
 
 				<table class="table table-striped">

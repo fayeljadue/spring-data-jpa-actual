@@ -100,6 +100,22 @@
 			<version>2.4.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+		</dependency>
+
+		<!-- Dependencias usadas para la aplicacion con xml a partir de jdk 9 o + debido a que nos las trae incluidas 
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+		</dependency> -->
+
 	</dependencies>
 
 	<build>
