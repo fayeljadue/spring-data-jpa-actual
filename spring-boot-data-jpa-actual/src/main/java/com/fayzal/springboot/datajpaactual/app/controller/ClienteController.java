@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -41,6 +42,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -50,6 +52,7 @@ import com.fayzal.springboot.datajpaactual.app.models.entity.Cliente;
 import com.fayzal.springboot.datajpaactual.app.service.IClienteService;
 import com.fayzal.springboot.datajpaactual.app.service.IUploadService;
 import com.fayzal.springboot.datajpaactual.app.util.paginator.PageRender;
+import com.fayzal.springboot.datajpaactual.app.view.xml.ClienteList;
 
 @Controller
 public class ClienteController {
@@ -65,6 +68,19 @@ public class ClienteController {
 	
 	@Autowired
 	private MessageSource messageSource;
+	
+	//No retorna una vista si no la clase pojo,entity o beans que queramos parsear a json,
+	//con @ResponseBody se indica que es Json
+	@GetMapping(value = "/listar-rest")
+	public @ResponseBody ClienteList listarRest() { 
+		//Para que funciones como Json y como xml se debe realizar por medio de la clase wrapper,
+		//si solo se desea con json se puede realizar de forma directa retornando nada mas la clase pojo
+		//return clienteDao.findAll();
+		return new ClienteList(clienteDao.findAll());	
+	}
+	
+	
+	
 	
 	@GetMapping({"/listar","/"})
 	public String listar(@RequestParam(name = "page",defaultValue = "0") int page,Model model,
@@ -107,6 +123,7 @@ public class ClienteController {
 		return "listar";
 	
 	}
+	
 	//Seguridad de la url por medio de anotaciones
 	@Secured(value = "ROLE_ADMIN")
 	@GetMapping("/form")

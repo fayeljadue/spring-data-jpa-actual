@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "facturas_items")
 public class ItemFactura implements Serializable {
@@ -21,8 +23,11 @@ public class ItemFactura implements Serializable {
 
 	private Integer cantidad;
 
+	//Paermite ignorar atributos al realizar una carga de estos datos tipo lazy, ya que Lazy realiza una copia del
+	//objeto y lo encapsula con otra clase la cual trae estos atributos @JsonIgnoreProperties({"hibernetLazyInitializer","handler"})
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "producto_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Producto producto;
 
 	public Long getId() {

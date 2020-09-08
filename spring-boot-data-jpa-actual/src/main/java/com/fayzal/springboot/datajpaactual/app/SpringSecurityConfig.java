@@ -44,7 +44,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter  {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		//Configuracion de permisos para las urls segun el perfil
-		http.authorizeRequests().antMatchers("/","/css/**","/js/**","/images/**","/listar","/login","/locale").permitAll()
+		http.authorizeRequests().antMatchers("/","/css/**","/js/**","/images/**","/listar**","/login","/locale","/api/clientes/**").permitAll()
 		/* Se comento para implementar la seguridad a nivel de los controlladores y accesos a las rutas en las clases
 		 * Usando @EnableGlobalMethodSecurity(securedEnabled = true)
 		 * .antMatchers("/ver/**").hasAnyRole("USER")

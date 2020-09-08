@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "productos")
 public class Producto implements Serializable {
@@ -27,6 +29,8 @@ public class Producto implements Serializable {
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "create_at")
+	//Formatea el dato en el json
+	@JsonFormat(pattern = "dd-MM-yyyy hh:mm:ss")
 	private Date createAt;
 
 	@PrePersist
